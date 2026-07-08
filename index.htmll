@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>विवाह पंजीकरण - फॉर्म रजिस्ट्रेशन</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
+        .form-box { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #1a3a5f; }
+        label { display: block; margin: 10px 0 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+
+<div class="form-box">
+    <h2>भाग 1: विवाह पंजीकरण फॉर्म</h2>
+    <form id="regForm">
+        <label>वर का पूरा नाम:</label>
+        <input type="text" id="gName" required placeholder="Groom's Name">
+
+        <label>वधू का पूरा नाम:</label>
+        <input type="text" id="bName" required placeholder="Bride's Name">
+
+        <label>विवाह की तिथि:</label>
+        <input type="date" id="mDate" required>
+
+        <label>कार्यालय (SRO Ghaziabad):</label>
+        <select id="sro" required>
+            <option value="SRO I">SRO गाजियाबाद प्रथम</option>
+            <option value="SRO II">SRO गाजियाबाद द्वितीय</option>
+            <option value="SRO III">SRO गाजियाबाद तृतीय</option>
+        </select>
+
+        <button type="button" onclick="nextPage()">विवरण सुरक्षित करें और आगे बढ़ें</button>
+    </form>
+</div>
+
+<script>
+    function nextPage() {
+        var form = document.getElementById('regForm');
+        if(!form.checkValidity()) {
+            alert("कृपया पहले सभी जानकारियां भरें।");
+            return;
+        }
+        // डेटा को ब्राउज़र की मेमोरी में सुरक्षित करना ताकि अगले पेज पर दिखे
+        localStorage.setItem('groom', document.getElementById('gName').value);
+        localStorage.setItem('bride', document.getElementById('bName').value);
+        localStorage.setItem('mDate', document.getElementById('mDate').value);
+        localStorage.setItem('sro', document.getElementById('sro').value);
+
+        // दूसरे पेज (upload.html) पर ऑटोमैटिक ट्रांसफर करना
+        window.location.href = "upload.html";
+    }
+</script>
+
+</body>
+</html>

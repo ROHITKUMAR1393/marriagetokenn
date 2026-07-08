@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saurabh Kumar & Associates | IGRSUP Token System</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f7f6; padding: 20px; color: #333; }
+        .container { max-width: 850px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #1a3a5f; margin-bottom: 5px; text-transform: uppercase; border-bottom: 2px solid #1a3a5f; padding-bottom: 10px; }
+        .subtitle { text-align: center; color: #d9534f; font-weight: bold; margin-bottom: 25px; font-size: 14px; }
+        .section-title { background: #1a3a5f; color: white; padding: 8px 15px; margin-top: 25px; border-radius: 6px; font-size: 16px; font-weight: bold; }
+        .row { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px; }
+        .col { flex: 1; min-width: 250px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px; color: #444; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        input[type="file"] { padding: 5px; background: #f9f9f9; }
+        .btn-container { margin-top: 35px; text-align: center; }
+        button { padding: 14px 35px; background: #007bff; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%; }
+        button:hover { background: #0056b3; }
+        
+        /* प्रोफेशनल रसीद स्टाइल */
+        #receipt { display: none; border: 3px double #1a3a5f; padding: 30px; margin-top: 30px; background: #fff; border-radius: 8px; }
+        .receipt-header { text-align: center; border-bottom: 2px solid #1a3a5f; padding-bottom: 10px; margin-bottom: 20px; }
+        .token-box { font-size: 26px; color: #d9534f; font-weight: bold; text-align: center; margin: 15px 0; border: 2px dashed #d9534f; padding: 10px; background: #fff9f9; }
+        .barcode { text-align: center; font-family: 'Courier New', Courier, monospace; font-weight: bold; letter-spacing: 5px; margin-bottom: 15px; color: #000; }
+        .receipt-section { font-weight: bold; background: #eee; padding: 5px 10px; margin-top: 15px; font-size: 14px; color: #1a3a5f; }
+        .receipt-row { display: flex; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px dashed #eee; padding-bottom: 5px; font-size: 14px; }
+        .receipt-label { font-weight: bold; color: #555; }
+        .print-btn { background: #28a745; margin-top: 25px; }
+        .print-btn:hover { background: #218838; }
+        
+        @media print {
+            body { background: white; padding: 0; }
+            .container, form, h2, .subtitle, .btn-container { display: none !important; }
+            #receipt { display: block !important; border: none; width: 100%; padding: 0; margin: 0; }
+            .print-btn { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>उत्तर प्रदेश विवाह पंजीकरण एवं ड्राफ्ट टोकन प्रणाली</h2>
+    <div class="subtitle">कार्यालय सब-रजिस्ट्रार (SRO) | गाजियाबाद, उत्तर प्रदेश</div>
+    
+    <form id="marriageForm">
+        <!-- 1. पंजीकरण कार्यालय -->
+        <div class="section-title">1. पंजीकरण कार्यालय एवं जनपद विवरण</div>
+        <div class="row">
+            <div class="col">
+                <label>जनपद (District):</label>
+                <select id="district" required>
+                    <option value="गाजियाबाद (Ghaziabad)">गाजियाबाद (Ghaziabad)</option>
+                    <option value="गौतम बुद्ध नगर (Noida)">गौतम बुद्ध नगर (Noida)</option>
+                    <option value="हापुड़ (Hapur)">हापुड़ (Hapur)</option>
+                </select>
+            </div>
+            <div class="col">
+                <label>सब-रजिस्ट्रार कार्यालय (SRO Office):</label>
+                <select id="sroOffice" required>
+                    <option value="SRO गाजियाबाद प्रथम (SRO I)">SRO गाजियाबाद प्रथम (SRO I)</option>
+                    <option value="SRO गाजियाबाद द्वितीय (SRO II)">SRO गाजियाबाद द्वितीय (SRO II)</option>
+                    <option value="SRO गाजियाबाद तृतीय (SRO III)">SRO गाजियाबाद तृतीय (SRO III)</option>
+                    <option value="SRO गाजियाबाद चतुर्थ (SRO IV)">SRO गाजियाबाद चतुर्थ (SRO IV)</option>
+                </select>
+            </div>
+            <div class="col">
+                <label>विवाह की तिथि (Date of Marriage):</label>
+                <input type="date" id="marriageDate" required>
+            </div>
+        </div>
+
+        <!-- 2. वर का विवरण -->
+        <div class="section-title">2. वर का पूर्ण विवरण (Groom's A to Z Details)</div>
+        <div class="row">
+            <div class="col">
+                <label>वर का पूरा नाम (आधार के अनुसार):</label>
+                <input type="text" id="groomName" required placeholder="वर का नाम">
+            </div>
+            <div class="col">
+                <label>मोबाइल नंबर (Mobile Number):</label>
+                <input type="tel" id="groomMobile" required placeholder="10 अंकों का मोबाइल नंबर" pattern="[0-9]{10}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>पिता का नाम (Father's Name):</label>
+                <input type="text" id="groomFather" required placeholder="पिता का नाम">
+            </div>
+            <div class="col">
+                <label>माता का नाम (Mother's Name):</label>
+                <input type="text" id="groomMother" required placeholder="माता का नाम">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>जन्मतिथि (DOB):</label>
+                <input type="date" id="groomDob" required>
+            </div>
+            <div class="col">
+                <label>पूरा स्थायी पता (Full Address):</label>
+                <input type="text" id="groomAddress" required placeholder="मकान नं, गली, वार्ड, शहर">
+            </div>
+        </div>
+
+        <!-- 3. वधू का विवरण -->
+        <div class="section-title">3. वधू का पूर्ण विवरण (Bride's A to Z Details)</div>
+        <div class="row">
+            <div class="col">
+                <label>वधू का पूरा नाम (आधार के अनुसार):</label>
+                <input type="text" id="brideName" required placeholder="वधू का नाम">
+            </div>
+            <div class="col">
+                <label>मोबाइल नंबर (Mobile Number):</label>
+                <input type="tel" id="brideMobile" required placeholder="10 अंकों का मोबाइल नंबर" pattern="[0-9]{10}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>पिता का नाम (Father's Name):</label>
+                <input type="text" id="brideFather" required placeholder="पिता का नाम">
+            </div>
+            <div class="col">
+                <label>माता का नाम (Mother's Name):</label>
+                <input type="text" id="brideMother" required placeholder="माता का नाम">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>जन्मतिथि (DOB):</label>
+                <input type="date" id="brideDob" required>
+            </div>
+            <div class="col">
+                <label>पूरा स्थायी पता (Full Address):</label>
+                <input type="text" id="brideAddress" required placeholder="मकान नं, गली, वार्ड, शहर">
+            </div>
+        </div>
+
+        <!-- 4. विवाह स्थल और पंडित का विवरण -->
+        <div class="section-title">4. विवाह स्थल एवं पुरोहित/पंडित/काज़ी विवरण</div>
+        <div class="row">
+            <div class="col">
+                <label>विवाह स्थल का प्रकार (Venue Type):</label>
+                <select id="venueType" required>
+                    <option value="बैंक्वेट हॉल / मैरिज होम">बैंक्वेट हॉल / मैरिज होम</option>
+                    <option value="धार्मिक स्थल (मंदिर/मस्जिद/गुरुद्वारा)">धार्मिक स्थल (मंदिर/मस्जिद/गुरुद्वारा)</option>
+                    <option value="आर्य समाज मंदिर">आर्य समाज मंदिर</option>
+                    <option value="न्यायालय परिसर / कोर्ट">न्यायालय परिसर / कोर्ट</option>
+                </select>
+            </div>
+            <div class="col">
+                <label>विवाह स्थल का नाम व पूरा पता:</label>
+                <input type="text" id="venueAddress" required placeholder="मैरिज होम या मंदिर का नाम व पता">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>पुजारी/पंडित/काज़ी का नाम:</label>
+                <input type="text" id="priestName" required placeholder="पंडित/पुजारी का नाम">
+            </div>
+            <div class="col">
+                <label>पंडित की आईडी (आधार/सर्टिफिकेट नंबर):</label>
+                <input type="text" id="priestId" required placeholder="आईडी नंबर दर्ज करें">
+            </div>
+            <div class="col">
+                <label>पंडित का मोबाइल नंबर:</label>
+                <input type="tel" id="priestMobile" required placeholder="पंडित का मोबाइल नंबर">
+            </div>
+        </div>
+
+        <!-- 5. गवाहों का विवरण -->
+        <div class="section-title">5. गवाहों का पूर्ण विवरण (Witnesses Details)</div>
+        <div class="row">
+            <div class="col">
+                <label>गवाह 1 का नाम व पिता का नाम:</label>
+                <input type="text" id="wit1Name" required placeholder="नाम और पिता का नाम">
+            </div>
+            <div class="col">
+                <label>गवाह 1 का मोबाइल, आधार व संबंध (Relation):</label>
+                <input type="text" id="wit1Details" required placeholder="मोबाइल नंबर, आधार नंबर और संबंध">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>गवाह 2 का नाम व पिता का नाम:</label>
+                <input type="text" id="wit2Name" required placeholder="नाम और पिता का नाम">
+            </div>
+            <div class="col">
+                <label>गवाह 2 का मोबाइल, आधार व संबंध (Relation):</label>
+                <input type="text" id="wit2Details" required placeholder="मोबाइल नंबर, आधार नंबर और संबंध">
+            </div>
+        </div>
+
+        <!-- 6. ए टू जेड दस्तावेज़ अपलोड -->
+        <div class="section-title">6. दस्तावेज़ अपलोड (A to Z Document Checklist)</div>
+        <div class="row">
+            <div class="col">
+                <label>वर का आधार कार्ड + निवास प्रमाण पत्र + फोटो:</label>
+                <input type="file" required>
+            </div>
+            <div class="col">
+                <label>वधू का आधार कार्ड + निवास प्रमाण पत्र + फोटो:</label>
+                <input type="file" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>विवाह साक्ष्य (शादी का कार्ड / आर्य समाज सर्टिफिकेट):</label>
+                <input type="file" required>
+            </div>
+            <div class="col">
+                <label>पुजारी/पंडित/काज़ी का पहचान पत्र (ID Proof):</label>
+                <input type="file" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>दोनों गवाहों के आधार कार्ड एवं पहचान पत्र:</label>
+                <input type="file" required>
+            </div>
+        </div>
+
+        <div class="btn-container">
+            <button type="button" onclick="generateOfficialToken()">विवरण सुरक्षित करें और आधिकारिक ड्राफ्ट टोकन जनरेट करें</button>
+        </div>
+    </form>
+
+    <!-- फाइनल प्रोफेशनल टोकन रसीद -->
+    <div id="receipt">
+        <div class="receipt-header">
+            <h2 style="border:none; margin:0; color:#1a3a5f;">उत्तर प्रदेश सरकार (IGRSUP)</h2>
+            <h3 style="margin:5px 0 0 0; color:#333;">विवाह पंजीकरण आधिकारिक पावती (ड्राफ्ट टोकन)</h3>
+            <p style="margin:5px 0 0 0; font-size:13px; font-weight:bold;">कार्यालय उप-निबंधक (SRO), गाजियाबाद, उ.प्र.</p>
+        </div>
+        
+        <div class="token-box" id="displayToken">---</div>
+        
+        <!-- डमी बारकोड SRO रीडर के लिए -->
+        <div class="barcode">
+            ||||||||||||||||||||||||||||||||||||||||||||||||||||||<br>
+            <span id="barcodeText" style="font-size: 12px; letter-spacing: normal;"></span>
+        </div>
+        
+        <div class="receipt-row"><span class="receipt-label">संबंधित जनपद / SRO कार्यालय:</span> <span id="resSro"></span></div>
+        <div class="receipt-row"><span class="receipt-label">आवेदन/जनरेशन तिथि व समय:</span> <span id="resDate"></span></div>
+        <div class="receipt-row"><span class="receipt-label">विवाह सम्पन्न होने की तिथि:</span> <span id="resMDate"></span></div>
+        
+        <div class="receipt-section">वर का पूर्ण विवरण (Groom Details)</div>
+        <div class="receipt-row"><span class="receipt-label">नाम (आधार अनुसार):</span> <span id="resGName"></span></div>
+        <div class="receipt-row"><span class="receipt-label">माता / पिता का नाम:</span> <span id="resGParents"></span></div>
+        <div class="receipt-row"><span class="receipt-label">संपर्क व जन्मतिथि:</span> <span id="resGContact"></span></div>
+        <div class="receipt-row"><span class="receipt-label">स्थायी निवास पता:</span> <span id="resGAddr"></span></div>
+        
+        <div class="receipt-section">वधू का पूर्ण विवरण (Bride Details)</div>
+        <div class="receipt-row"><span class="receipt-label">नाम (आधार अनुसार):</span> <span id="resBName"></span></div>
+        <div class="receipt-row"><span class="receipt-label">माता / पिता का नाम:</span> <span id="resBParents"></span></div>
+        <div class="receipt-row"><span class="receipt-label">संपर्क व जन्मतिथि:</span> <span id="resBContact"></span></div>
+        <div class="receipt-row"><span class="receipt-label">स्थायी निवास पता:</span> <span id="resBAddr"></span></div>
+
+        <div class="receipt-section">विवाह स्थल एवं पुरोहित/पंडित विवरण</div>
+        <div class="receipt-row"><span class="receipt-label">विवाह स्थल व पता:</span> <span id="resVenue"></span></div>
+        <div class="receipt-row"><span class="receipt-label">पंडित/काज़ी का नाम व आईडी:</span> <span id="resPriest"></span></div>
+
+        <div class="receipt-section">गवाहों का विवरण (Witnesses Verification)</div>
+        <div class="receipt-row"><span class="receipt-label">प्रथम साक्षी (Witness 1):</span> <span id="resWit1"></span></div>
+        <div class="receipt-row"><span class="receipt-label">द्वितीय साक्षी (Witness 2):</span> <span id="resWit2"></span></div>
+        
+        <div class="receipt-row" style="margin-top:20px;"><span class="receipt-label">दस्तावेज़ स्थिति (A-Z Upload):</span> <span style="color: green; font-weight: bold;">सफलतापूर्वक संलग्न (Verified)</span></div>
+        <div class="receipt-row"><span class="receipt-label">आवेदन स्थिति (Status):</span> <span style="color: #d9534f; font-weight: bold;">ड्राफ्ट टोकन रिकॉर्ड स्वीकृत</span></div>
+        
+        <button class="print-btn" onclick="window.print()">इस पावती टोकन रसीद को प्रिंट करें / PDF सेव करें</button>
+    </div>
+</div>
+
+<script>
+    function generateOfficialToken() {
+        var form = document.getElementById('marriageForm');
+        if (!form.checkValidity()) {
+            alert("कृपया टोकन जनरेट करने से पहले सभी आवश्यक प्रोफेशनल कॉलम और दस्तावेज़ चेकलिस्ट भरें।");
+            return;
+        }
+
+        // रैंडम टोकन संख्या जनरेट करना
+        var rand = Math.floor(100000 + Math.random() * 900000);
+        var tokenNumber = "UP-MREG-2026-" + rand;
+        var currentDateTime = new Date().toLocaleString('hi-IN');
+
+        // रसीद में डेटा ट्रांसफर करना
+        document.getElementById('displayToken').innerText = "टोकन संख्या: " + tokenNumber;
+        document.getElementById('barcodeText').innerText = "" + tokenNumber + "";
+        document.getElementById('resSro').innerText = document.getElementById('district').value + " - " + document.getElementById('sroOffice').value;
+        document.getElementById('resDate').innerText = currentDateTime;
+        document.getElementById('resMDate').innerText = document.getElementById('marriageDate').value;
+        
+        document.getElementById('resGName').innerText = document.getElementById('groomName').value;
+        document.getElementById('resGParents').innerText = "पिता: " + document.getElementById('groomFather').value + " / माता: " + document.getElementById('groomMother').value;
+        document.getElementById('resGContact').innerText = "मोबाइल: " + document.getElementById('groomMobile').value + " / DOB: " + document.getElementById('groomDob').value;
+        document.getElementById('resGAddr').innerText = document.getElementById('groomAddress').value;
+
+        document.getElementById('resBName').innerText = document.getElementById('brideName').value;
+        document.getElementById('resBParents').innerText = "पिता: " + document.getElementById('brideFather').value + " / माता: " + document.getElementById('brideMother').value;
+        document.getElementById('resBContact').innerText = "मोबाइल: " + document.getElementById('brideMobile').value + " / DOB: " + document.getElementById('brideDob').value;
+        document.getElementById('resBAddr').innerText = document.getElementById('brideAddress').value;
+
+        document.getElementById('resVenue').innerText = "[" + document.getElementById('venueType').value + "] " + document.getElementById('venueAddress').value;
+        document.getElementById('resPriest').innerText = document.getElementById('priestName').value + " (ID: " + document.getElementById('priestId').value + ", मो: " + document.getElementById('priestMobile').value + ")";
+
+        document.getElementById('resWit1').innerText = document.getElementById('wit1Name').value + " -> [" + document.getElementById('wit1Details').value + "]";
+        document.getElementById('resWit2').innerText = document.getElementById('wit2Name').value + " -> [" + document.getElementById('wit2Details').value + "]";
+
+        // रसीद को स्क्रीन पर दिखाना
+        document.getElementById('receipt').style.display = 'block';
+        document.getElementById('receipt').scrollIntoView({ behavior: 'smooth' });
+        
+        alert("विवरण सुरक्षित कर लिया गया है। नीचे आपका ए टू जेड ऑफिशियल ड्राफ्ट टोकन तैयार है।");
+    }
+</script>
+
+</body>
+</html>
